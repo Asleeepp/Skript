@@ -54,15 +54,25 @@ public class Timespan implements YggdrasilSerializable, Comparable<Timespan> { /
 		YEAR(DAY.time * 365L);
 
 		private final Noun name;
+		private final Noun shortName;
 		private final long time;
 
 		TimePeriod(long time) {
-			this.name = new Noun("time." + this.name().toLowerCase(Locale.ENGLISH));
+			this.name = new Noun("time." + this.name().toLowerCase(Locale.ENGLISH) + ".full");
+			this.shortName = new Noun("time." + this.name().toLowerCase(Locale.ENGLISH) + ".short");
 			this.time = time;
 		}
 
 		public long getTime() {
 			return time;
+		}
+
+		public String getFullForm() {
+			return name.toString();
+		}
+
+		public String getShortForm() {
+			return shortName.toString();
 		}
 
 	}
@@ -86,6 +96,8 @@ public class Timespan implements YggdrasilSerializable, Comparable<Timespan> { /
 				for (TimePeriod time : TimePeriod.values()) {
 					PARSE_VALUES.put(time.name.getSingular().toLowerCase(Locale.ENGLISH), time.getTime());
 					PARSE_VALUES.put(time.name.getPlural().toLowerCase(Locale.ENGLISH), time.getTime());
+					PARSE_VALUES.put(time.shortName.getSingular().toLowerCase(Locale.ENGLISH), time.getTime());
+					PARSE_VALUES.put(time.shortName.getPlural().toLowerCase(Locale.ENGLISH), time.getTime());
 				}
 			}
 		});
@@ -102,9 +114,14 @@ public class Timespan implements YggdrasilSerializable, Comparable<Timespan> { /
 		if (value.isEmpty())
 			return null;
 
-		long t = 0;
+		long totalMillis = 0;
 		boolean minecraftTime = false;
 		boolean isMinecraftTimeSet = false;
+
+		Timespan shortenedTimespan = parseShortenedTimespan(value);
+		if (shortenedTimespan != null) {
+			return shortenedTimespan;
+		}
 
 		Matcher matcher = TIMESPAN_PATTERN.matcher(value);
 		if (matcher.matches()) { // MM:SS[.ms] or HH:MM:SS[.ms] or DD:HH:MM:SS[.ms]
@@ -120,7 +137,7 @@ public class Timespan implements YggdrasilSerializable, Comparable<Timespan> { /
 				offset = 1;
 
 			for (int i = 0; i < substring.length; i++) {
-				t += times[offset + i] * Utils.parseLong("" + substring[i]);
+				totalMillis += times[offset + i] * Utils.parseLong("" + substring[i]);
 			}
 		} else { // <number> minutes/seconds/.. etc
 			String[] substring = value.toLowerCase(Locale.ENGLISH).split("\\s+");
@@ -163,25 +180,61 @@ public class Timespan implements YggdrasilSerializable, Comparable<Timespan> { /
 				if (sub.endsWith(","))
 					sub = sub.substring(0, sub.length() - 1);
 
-				Long d = PARSE_VALUES.get(sub.toLowerCase(Locale.ENGLISH));
-				if (d == null)
+				Long millis = PARSE_VALUES.get(sub.toLowerCase(Locale.ENGLISH));
+				if (millis == null)
 					return null;
-				
-				if (minecraftTime && d != TimePeriod.TICK.time)
+
+				if (minecraftTime && millis != TimePeriod.TICK.time)
 					amount /= 72f;
-				
-				t += Math.round(amount * d);
-				
+
+				totalMillis += Math.round(amount * millis);
+
 				isMinecraftTimeSet = true;
-				
 			}
 		}
 
-		return new Timespan(t);
+		return totalMillis > 0 ? new Timespan(totalMillis) : null;
 	}
 	
 	public Timespan() {
 		millis = 0;
+	}
+
+	/**
+	 * Parses a string representing a shortened timespan, such as "1d" for 1 day,
+	 * "2h" for 2 hours, or "30m" for 30 minutes.
+	 * @param value The string representing the shortened timespan.
+	 * @return A {@link Timespan} object representing the parsed timespan, or {@code null} if the input string is invalid.
+	 */
+	@Nullable
+	public static Timespan parseShortenedTimespan(String value) {
+		if (value.isEmpty()) {
+			return null;
+		}
+
+		long totalMillis = 0;
+		Pattern pattern = Pattern.compile("(\\d+)([a-zA-Z]+)");
+		Matcher matcher = pattern.matcher(value);
+
+		while (matcher.find()) {
+			long amount = Long.parseLong(matcher.group(1));
+			String shortUnit = matcher.group(2).toLowerCase(Locale.ENGLISH);
+
+			boolean found = false;
+			for (TimePeriod timePeriod : TimePeriod.values()) {
+				if (timePeriod.getShortForm().equalsIgnoreCase(shortUnit)) {
+					totalMillis += amount * timePeriod.getTime();
+					found = true;
+					break;
+				}
+			}
+
+			if (!found) {
+				return null; // invalid timespan unit
+			}
+		}
+
+		return totalMillis > 0 ? new Timespan(totalMillis) : null;
 	}
 
 	/**
