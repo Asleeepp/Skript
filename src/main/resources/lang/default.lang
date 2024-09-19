@@ -2292,6 +2292,92 @@ operators:
 	divide: division
 	exponentiate: exponentiation
 
+# -- Statistics --
+statistics:
+    animals_bred: animals bred
+    armor_cleaned: armor cleaned
+    aviate_one_cm: aviate one centimeter, aviate one centimetre
+    banner_cleaned: banner cleaned
+    beacon_interaction: beacon interaction
+    bell_ring: bell ring
+    boat_one_cm: boat one centimeter, boat one centimetre
+    break_item: break item
+    brewingstand_interaction: brewing stand interaction
+    cake_slices_eaten: cake slices eaten
+    cauldron_filled: cauldron filled
+    cauldron_used: cauldron used
+    chest_opened: chest opened
+    clean_shulker_box: clean shulker box
+    climb_one_cm: climb one centimeter, climb one centimetre
+    craft_item: craft item
+    crafting_table_interaction: crafting table interaction
+    crouch_one_cm: crouch one centimeter, crouch one centimetre
+    damage_absorbed: damage absorbed
+    damage_blocked_by_shield: damage blocked by shield
+    damage_dealt: damage dealt
+    damage_dealt_absorbed: damage dealt absorbed
+    damage_dealt_resisted: damage dealt resisted
+    damage_resisted: damage resisted
+    damage_taken: damage taken
+    deaths: deaths
+    dispenser_inspected: dispenser inspected
+    drop: drop
+    drop_count: drop count
+    dropper_inspected: dropper inspected
+    enderchest_opened: enderchest opened
+    entity_killed_by: entity killed by
+    fall_one_cm: fall one centimeter, fall one centimetre
+    fish_caught: fish caught
+    flower_potted: flower potted
+    fly_one_cm: fly one centimeter, fly one centimetre
+    furnace_interaction: furnace interaction
+    hopper_inspected: hopper inspected
+    horse_one_cm: horse one centimeter, horse one centimeter
+    interact_with_anvil: interact with anvil
+    interact_with_blast_furnace: interact with blast furnace
+    interact_with_campfire: interact with campfire
+    interact_with_cartography_table: interact with cartography table
+    interact_with_grindstone: interact with grindstone
+    interact_with_lectern: interact with lectern
+    interact_with_loom: interact with loom
+    interact_with_smithing_table: interact with smithing table
+    interact_with_smoker: interact with smoker
+    interact_with_stonecutter: interact with stonecutter
+    item_enchanted: item enchanted
+    jump: jump
+    kill_entity: kill entity
+    leave_game: leave game
+    mine_block: mine block
+    minecart_one_cm: minecart one centimeter, minecart one centimetre
+    mob_kills: mob kills
+    noteblock_played: noteblock played
+    noteblock_tuned: noteblock tuned
+    open_barrel: open barrel
+    pickup: pickup
+    pig_one_cm: pig one centimeter, pig one centimetre
+    play_one_minute: play one minute
+    player_kills: player kills
+    raid_trigger: raid trigger
+    raid_win: raid win
+    record_played: record played
+    shulker_box_opened: shulker box opened
+    sleep_in_bed: sleep in bed
+    sneak_time: sneak time
+    sprint_one_cm: sprint one centimeter, sprint one centimetre
+    strider_one_cm: strider one centimeter, strider one centimetre
+    swim_one_cm: swim one centimeter, swim one centimetre
+    talked_to_villager: talked to villager
+    target_hit: target hit
+    time_since_death: time since death
+    time_since_rest: time since rest
+    total_world_time: total world time
+    traded_with_villager: traded with villager
+    trapped_chest_triggered: trapped chest triggered
+    use_item: use item
+    walk_on_water_one_cm: walk on water one centimeter, walk on water one centimetre
+    walk_one_cm: walk one centimeter, walk one centimetre
+    walk_under_water_one_cm: walk under water one centimeter, walk under water one centimetre
+
 # -- Types --
 types:
 	# Java

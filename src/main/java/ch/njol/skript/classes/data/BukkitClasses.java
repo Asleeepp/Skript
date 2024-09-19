@@ -41,6 +41,7 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Registry;
 import org.bukkit.SoundCategory;
+import org.bukkit.Statistic;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
@@ -1526,6 +1527,13 @@ public class BukkitClasses {
 				.name("Transform Reason")
 				.description("Represents a transform reason of an <a href='events.html#entity transform'>entity transform event</a>.")
 				.since("2.8.0"));
+		Classes.registerClass(new EnumClassInfo<>(Statistic.class, "statistic", "statistics")
+				.user("statistics?")
+				.name("Statistic")
+				.description("Represents a countable statistic, which is tracked by the server.")
+				.examples("") // TODO finish this
+				.since("INSERT VERSION")
+		);
 	}
 
 }

@@ -28,6 +28,7 @@ import ch.njol.skript.aliases.Aliases;
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.bukkitutil.InventoryUtils;
 import ch.njol.skript.command.CommandEvent;
+import ch.njol.skript.entity.EntityData;
 import ch.njol.skript.events.bukkit.ScriptEvent;
 import ch.njol.skript.events.bukkit.SkriptStartEvent;
 import ch.njol.skript.events.bukkit.SkriptStopEvent;
@@ -57,6 +58,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Statistic;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -155,6 +157,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerQuitEvent.QuitReason;
 import org.bukkit.event.player.PlayerRiptideEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
@@ -1933,6 +1936,48 @@ public final class BukkitEventValues {
 			@Nullable
 			public RegainReason get(EntityRegainHealthEvent event) {
 				return event.getRegainReason();
+			}
+		}, EventValues.TIME_NOW);
+
+		// PlayerStatisticIncrementEvent
+		EventValues.registerEventValue(PlayerStatisticIncrementEvent.class, Statistic.class, new Getter<Statistic, PlayerStatisticIncrementEvent>() {
+			@Override
+			public @Nullable Statistic get(PlayerStatisticIncrementEvent event) {
+				return event.getStatistic();
+			}
+		}, EventValues.TIME_NOW);
+
+		EventValues.registerEventValue(PlayerStatisticIncrementEvent.class, Number.class, new Getter<Number, PlayerStatisticIncrementEvent>() {
+			@Override
+			public Number get(PlayerStatisticIncrementEvent event) {
+				return event.getPreviousValue();
+			}
+		}, EventValues.TIME_PAST);
+		EventValues.registerEventValue(PlayerStatisticIncrementEvent.class, Number.class, new Getter<Number, PlayerStatisticIncrementEvent>() {
+			@Override
+			public Number get(PlayerStatisticIncrementEvent event) {
+				return event.getNewValue() - event.getPreviousValue();
+			}
+		}, EventValues.TIME_NOW);
+		EventValues.registerEventValue(PlayerStatisticIncrementEvent.class, Number.class, new Getter<Number, PlayerStatisticIncrementEvent>() {
+			@Override
+			public Number get(PlayerStatisticIncrementEvent event) {
+				return event.getNewValue();
+			}
+		}, EventValues.TIME_FUTURE);
+		EventValues.registerEventValue(PlayerStatisticIncrementEvent.class, EntityData.class, new Getter<EntityData, PlayerStatisticIncrementEvent>() {
+			@Nullable
+			@Override
+			public EntityData<?> get(PlayerStatisticIncrementEvent event) {
+				Class<? extends Entity> c = event.getEntityType() != null ? event.getEntityType().getEntityClass() : null;
+				return c == null ? null : EntityData.fromClass(c);
+			}
+		}, EventValues.TIME_NOW);
+		EventValues.registerEventValue(PlayerStatisticIncrementEvent.class, ItemStack.class, new Getter<ItemStack, PlayerStatisticIncrementEvent>() {
+			@Nullable
+			@Override
+			public ItemStack get(PlayerStatisticIncrementEvent event) {
+				return event.getMaterial() == null ? null : new ItemStack(event.getMaterial());
 			}
 		}, EventValues.TIME_NOW);
 	}
